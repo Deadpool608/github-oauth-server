@@ -53,3 +53,8 @@ app.get('/callback', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
+
+app.get('/', (req, res) => {
+    console.log('Received GET request on /');
+    res.send('Hello from the server!'); 
+  });

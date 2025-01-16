@@ -13,7 +13,7 @@ app.use(express.json());
 
 const clientId = process.env.GITHUB_CLIENT_ID;
 const clientSecret = process.env.GITHUB_CLIENT_SECRET;
-const redirectUri = 'http://localhost:3000/callback'; // Replace with your actual frontend callback URL
+const redirectUri = 'https://goaltrackerloginserver.netlify.app:3001/callback'; // Replace with your actual frontend callback URL
 
 app.get('/login', (req, res) => {
   const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}`;

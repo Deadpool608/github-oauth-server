@@ -6,14 +6,14 @@ const cors = require('cors');
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3001; 
+const port = process.env.PORT || 8080; 
 
 app.use(cors()); 
 app.use(express.json()); 
 
 const clientId = process.env.GITHUB_CLIENT_ID;
 const clientSecret = process.env.GITHUB_CLIENT_SECRET;
-const redirectUri = 'https://goaltrackerloginserver.netlify.app:3001/callback'; // Replace with your actual frontend callback URL
+const redirectUri = 'https://goaltrackerloginserver.netlify.app/callback'; // Replace with your actual frontend callback URL
 
 app.get('/login', (req, res) => {
   const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}`;

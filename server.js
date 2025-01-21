@@ -1,19 +1,16 @@
 const express = require('express');
-const dotenv = require('dotenv');
-const axios = require('axios');
 const cors = require('cors');
-
+const axios = require('axios');
+const dotenv = require('dotenv');
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 8080; 
-
-app.use(cors()); 
+app.use(cors());
 app.use(express.json()); 
 
 const clientId = process.env.GITHUB_CLIENT_ID;
 const clientSecret = process.env.GITHUB_CLIENT_SECRET;
-const redirectUri = 'https://goaltrackerloginserver.netlify.app/callback'; // Replace with your actual frontend callback URL
+const redirectUri = 'http://localhost:3000/callback'; // Replace with your actual frontend URL
 
 app.get('/login', (req, res) => {
   const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}`;
@@ -39,22 +36,32 @@ app.get('/callback', async (req, res) => {
       }
     );
 
-    const accessToken = response.data.access_token;
-    // Here you would typically store the access token (e.g., in a database or session)
+    const accessToken = response.data.access_token; 
+    // **Simulate user data retrieval (replace with actual API call)**
+    const userData = await axios.get('https://api.github.com/user', {
+      headers: {
+        'Authorization': `token ${accessToken}`
+      }
+    });
 
-    res.send('Authentication successful! You can now close this window.'); 
+    // **Store user data (in-memory for this example)**
+    // In a real application, you would store this data in a database
+    const user = { 
+      id: userData.data.id, 
+      username: userData.data.login, 
+      avatarUrl: userData.data.avatar_url 
+    }; 
+
+    // **Send user data to the frontend (you'll handle this in your frontend code)**
+    res.json(user); 
 
   } catch (error) {
     console.error('Error:', error);
-    res.status(500).send('Authentication failed.');
+    res.status(500).json({ error: 'Authentication failed.' });
   }
 });
 
+const port = 3000; 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
-
-app.get('/', (req, res) => {
-    console.log('Received GET request on /');
-    res.send('Hello from the server!'); 
-  });
